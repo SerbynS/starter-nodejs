@@ -2,6 +2,9 @@ import { userRepository } from "../repositories/userRepository.js";
 
 class UserService {
   // TODO: Implement methods to work with user
+  getAll() {
+    return userRepository.getAll();
+  }
 
   search(search) {
     const item = userRepository.getOne(search);
