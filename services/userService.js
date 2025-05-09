@@ -6,6 +6,10 @@ class UserService {
     return userRepository.getAll();
   }
 
+  getUser(id) {
+    return this.search({ id });
+  }
+
   search(search) {
     const item = userRepository.getOne(search);
     if (!item) {

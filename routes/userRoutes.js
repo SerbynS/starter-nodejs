@@ -14,10 +14,41 @@ const router = Router();
 router.get("/", (req, res) => {
   try {
     const users = userService.getAll();
-    res.status(200).json(users);
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ error: "" });
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({
+        error: true,
+        message: "Users not found",
+      });
+    }
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(400).json({
+      error: true,
+      message: "",
+    });
+  }
+});
+
+// GET /api/users/:id
+router.get("/:id", (req, res) => {
+  try {
+    const user = userService.getUser(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        error: true,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(400).json({
+      error: true,
+      message: "",
+    });
   }
 });
 
