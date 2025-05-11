@@ -7,49 +7,95 @@ import {
 import { responseMiddleware } from "../middlewares/response.middleware.js";
 
 const router = Router();
+// router.use(responseMiddleware);
 
 // TODO: Implement route controllers for user
 
 // GET /api/users
-router.get("/", (req, res) => {
-  try {
-    const users = userService.getAll();
-
-    if (!users || users.length === 0) {
-      return res.status(404).json({
-        error: true,
-        message: "Users not found",
-      });
+router.get(
+  "/",
+  (req, res, next) => {
+    console.log("GET users");
+    try {
+      const users = userService.getAll();
+      res.data = users;
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
     }
-
-    return res.status(200).json(users);
-  } catch (error) {
-    return res.status(400).json({
-      error: true,
-      message: "",
-    });
-  }
-});
+  },
+  responseMiddleware
+);
 
 // GET /api/users/:id
-router.get("/:id", (req, res) => {
-  try {
-    const user = userService.getUser(req.params.id);
-
-    if (!user) {
-      return res.status(404).json({
-        error: true,
-        message: "User not found",
-      });
+router.get(
+  "/:id",
+  (req, res, next) => {
+    console.log("GET user");
+    try {
+      const user = userService.getUser(req.params.id);
+      res.data = user;
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
     }
+  },
+  responseMiddleware
+);
 
-    return res.status(200).json(user);
-  } catch (error) {
-    return res.status(400).json({
-      error: true,
-      message: "",
-    });
-  }
-});
+// POST /api/users
+router.post(
+  "/",
+  createUserValid,
+  (req, res, next) => {
+    console.log("POST user");
+    try {
+      const newUser = userService.createUser(req.body);
+      res.data = newUser;
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
+// // PATCH /api/users/:id
+router.patch(
+  "/:id",
+  updateUserValid,
+  (req, res, next) => {
+    console.log("Patch users");
+    try {
+      const updateUser = userService.updateUser(req.params.id, req.body);
+      res.data = updateUser;
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
+// DELETE /api/users/:id
+router.delete(
+  "/:id",
+  (req, res, next) => {
+    console.log("DELETE user");
+    try {
+      const deleteUser = userService.deleteUser(req.params.id);
+      res.data = deleteUser;
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
 
 export { router };
