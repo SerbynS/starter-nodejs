@@ -119,10 +119,10 @@ const updateUserValid = (req, res, next) => {
   }
 
   const allowedFields = ["firstName", "lastName", "email", "phone", "password"];
-  const invalidFields = Object.keys(req.body).filter((key) =>
-    Object.keys(USER).includes(key)
+  const invalidFields = Object.keys(req.body).filter(
+    (key) => !Object.keys(USER).includes(key)
   );
-
+  console.log(invalidFields);
   if (invalidFields.length > 0) {
     return res
       .status(400)

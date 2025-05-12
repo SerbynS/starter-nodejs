@@ -3,13 +3,12 @@ import { userRepository } from "../repositories/userRepository.js";
 class UserService {
   // TODO: Implement methods to work with user
   getAll() {
-    // const result = userRepository.getAll();
     return userRepository.getAll();
   }
 
   getUser(id) {
     const user = this.search({ id });
-    if (!user.length) {
+    if (!user) {
       throw Error("User not found");
     }
     return user;
@@ -30,6 +29,7 @@ class UserService {
 
   updateUser(id, dataToUpdate) {
     const result = this.search({ id });
+
     if (!result) {
       throw Error("User not found");
     }
